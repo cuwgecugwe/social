@@ -1,0 +1,5 @@
+Route::get('estudiante', [EstudianteController::class, 'index'])->name('estudiante.index');
+    Route::post('estudiante', [EstudianteController::class, 'store'])->name('estudiante.store');
+    Route::put('estudiante/{id}', [EstudianteController::class, 'update'])->name('estudiante.update');
+    Route::delete('estudiante/{id}', [EstudianteController::class, 'destroy'])->name('estudiante.destroy');
+    

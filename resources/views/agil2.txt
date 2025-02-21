@@ -1,0 +1,24 @@
+public function update(Request $request, string $id)
+    {
+        $validatedData = $request->validate([
+            'fecha' => 'required',
+            'hora' => 'required',
+            'estudiante_id' => 'required',
+            'proyecto_id' => 'required',
+        ]);
+
+        $registrohoras = registrohora::findOrFail($id);
+
+        $registrohoras->fecha = $validatedData['fecha'];
+        $registrohoras->hora = $validatedData['hora'];
+        $registrohoras->estudiante_id = $validatedData['estudiante_id'];
+        $registrohoras->proyecto_id = $validatedData['proyecto_id'];
+
+        $registrohoras->save();
+
+        if ($registrohoras){
+            return redirect()->route('admin.registrohora.index')->with('success', 'La registrohora fue actualizado correctamente.');
+        } else {
+            return redirect()->back()->withErrors('No se actualizo correctamente la registrohora:' . $registrohoras->getMessage());
+        }
+    }
