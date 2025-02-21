@@ -107,4 +107,6 @@ class EstudianteController extends Controller
         estudiante::find($id)->delete();
         return redirect()->route('admin.estudiante.index')->with('success', 'El estudiante fue eliminado correctamente.');
     }
+
+
 }

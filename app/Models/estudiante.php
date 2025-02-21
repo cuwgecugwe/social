@@ -25,4 +25,11 @@ class estudiante extends Model
         return $this->belongsTo(carrera::class, 'carrera_id');
         // 'carrera_id' es la clave foránea que conecta esta tabla con la tabla 'carreras'.
     }
+    public function proyectos()
+    {
+        // Define una relación "pertenece a" (belongsTo) con el modelo 'Carrera'.
+        // Esto significa que un estudiante pertenece a una carrera.
+        return $this->hasMany(proyecto::class, 'estudiante_id');
+        // 'carrera_id' es la clave foránea que conecta esta tabla con la tabla 'carreras'.
+    }
 }

@@ -30,6 +30,30 @@
             <form method="POST" action="">
                 @csrf
                 <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="dni">DNI</label>
+                            <div class="input-group">
+                                <input type="search" class="form-control" name="dni" id="dni" placeholder="Ingrese el DNI" autocomplete="off" required>
+                                <input type="hidden" name="estudiante_id" id="estudiante_id">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" type="button" id="searchButton">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="nombre">Nombre</label>
+                            <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Nombre" autocomplete="off" required oninput="this.value = this.value.toUpperCase();">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="apellido">Apellido</label>
+                            <input type="text" class="form-control" name="apellido" id="apellido" placeholder="Apellido" autocomplete="off" required oninput="this.value = this.value.toUpperCase();">
+                        </div>
+                    </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="nombre_proyecto">Proyecto</label>
@@ -40,6 +64,19 @@
                         <div class="form-group">
                             <label for="descripcion">Descripcion</label>
                             <input type="text" class="form-control" name="descripcion" id='descripcion' placeholder="Escriba su descripcion" autocomplete="off" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="fecha">Fecha</label>
+                            <input type="DATE" class="form-control" name="fecha" id='fecha' placeholder="Escriba su fecha" autocomplete="off" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="hora">Horas</label>
+                            <input type="number" class="form-control" name="hora" id='hora' placeholder="Escriba su hora" autocomplete="off" required>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -62,8 +99,11 @@
                 <thead>
                     <tr>
                         <th>Id</th>
+                        <th>Estudiante</th>
                         <th>Nombre Proyecto</th>
                         <th>Descripcion</th>
+                        <th>Fecha</th>
+                        <th>Horas</th>
                         <th>Editar</th>
                         <th>Eliminar</th>
                     </tr>
@@ -72,8 +112,11 @@
                     @foreach ($proyecto as $proyectos)
                         <tr>
                             <td>{{ $proyectos->id }}</td>
+                            <td>{{ $proyectos->$estudiante->nombre.$estudiante->apellido }}</td>
                             <td>{{ $proyectos->nombre_proyecto }}</td>
                             <td>{{ $proyectos->descripcion }}</td>
+                            <td>{{ $proyectos->fecha }}</td>
+                            <td>{{ $proyectos->hora }}</td>
                             <td width="10px">
                                 <a href="" class="btn btn-warning" data-toggle="modal" data-target="#editModal{{ $proyectos->id }}"><i class="fas fa-edit"></i></a>
                             </td>
@@ -100,12 +143,24 @@
                                         <div class="modal-body">
                                             <!-- Campos del formulario de edición -->
                                             <div class="form-group">
-                                                <label for="nombre_proyecto{{ $proyectos->id }}">Unidad de proyecto</label>
+                                                <label for="estudiante_id{{ $proyectos->id }}">Estudiante</label>
+                                                <input type="text" class="form-control" name="estudiante_id" id="nombre_proyecto{{ $proyectos->id }}" value="{{ $proyectos->estudiante_id}}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="nombre_proyecto{{ $proyectos->id }}">Nombre proyecto</label>
                                                 <input type="text" class="form-control" name="nombre_proyecto" id="nombre_proyecto{{ $proyectos->id }}" value="{{ $proyectos->nombre_proyecto}}" oninput="this.value = this.value.toUpperCase();">
                                             </div>
                                             <div class="form-group">
                                                 <label for="descripcion{{ $proyectos->id }}">Abreviatura</label>
                                                 <input type="text" class="form-control" name="descripcion" id="nombre_proyecto{{ $proyectos->id }}" value="{{ $proyectos->descripcion}}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="fecha{{ $proyectos->id }}">Fecha</label>
+                                                <input type="text" class="form-control" name="fecha" id="nombre_proyecto{{ $proyectos->id }}" value="{{ $proyectos->fecha}}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="hora{{ $proyectos->id }}">Hora</label>
+                                                <input type="text" class="form-control" name="hora" id="nombre_proyecto{{ $proyectos->id }}" value="{{ $proyectos->hora}}">
                                             </div>
                                         </div>
                                         <div class="modal-footer">
@@ -122,3 +177,26 @@
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("searchButton").addEventListener("click", function() {
+        let dni = document.getElementById("dni").value;
+
+        if (dni.trim() !== "") {
+            fetch("{{ route('admin.proyecto.buscar') }}?dni=" + dni)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    document.getElementById("nombre").value = data.nombre;
+                    document.getElementById("apellido").value = data.apellido;
+                }
+            })
+            .catch(error => console.error("Error en la solicitud:", error));
+        } else {
+            alert("Ingrese un DNI válido.");
+        }
+    });
+});
+</script>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\estudiante;
 use App\Models\proyecto;
 use Illuminate\Http\Request;
 
@@ -30,14 +31,20 @@ class ProyectoController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
+            'estudiante_id' => 'required|exists:estudiantes,id',
             'nombre_proyecto' => 'required',
             'descripcion' => 'required',
+            'fecha' => 'required',
+            'hora' => 'required',
         ]);
 
         $proyectos = new proyecto();
 
+        $proyectos->estudiante_id = $validatedData['estudiante_id'];
         $proyectos->nombre_proyecto = $validatedData['nombre_proyecto'];
         $proyectos->descripcion = $validatedData['descripcion'];
+        $proyectos->fecha = $validatedData['fecha'];
+        $proyectos->hora = $validatedData['hora'];
 
         $proyectos->save();
 
@@ -70,14 +77,20 @@ class ProyectoController extends Controller
     public function update(Request $request, string $id)
     {
         $validatedData = $request->validate([
+            'estudiante_id' => 'required',
             'nombre_proyecto' => 'required',
             'descripcion' => 'required',
+            'fecha' => 'required',
+            'hora' => 'required',
         ]);
 
         $proyectos = proyecto::findOrFail($id);
 
+        $proyectos->estudiante_id = $validatedData['estudiante_id'];
         $proyectos->nombre_proyecto = $validatedData['nombre_proyecto'];
         $proyectos->descripcion = $validatedData['descripcion'];
+        $proyectos->fecha = $validatedData['fecha'];
+        $proyectos->hora = $validatedData['hora'];
 
         $proyectos->save();
 
@@ -95,5 +108,25 @@ class ProyectoController extends Controller
     {
         proyecto::find($id)->delete();
         return redirect()->route('admin.proyecto.index')->with('success', 'El proyecto fue eliminado correctamente.');
+    }
+
+    public function buscar(Request $request)
+    {
+        $dni = $request->query('dni');
+
+        if (!$dni) {
+            return response()->json(['error' => 'Debe proporcionar un DNI'], 400);
+        }
+
+        $estudiante = estudiante::where('dni', $dni)->first();
+
+        if ($estudiante) {
+            return response()->json([
+                'nombre' => $estudiante->nombre,
+                'apellido' => $estudiante->apellido
+            ]);
+        } else {
+            return response()->json(['error' => 'No se encontró el estudiante'], 404);
+        }
     }
 }

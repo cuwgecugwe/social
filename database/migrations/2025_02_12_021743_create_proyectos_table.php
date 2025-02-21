@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('proyectos', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('estudiante_id'); 
+            $table->foreign('estudiante_id')->references('id')->on('estudiantes')->onDelete('cascade'); 
             $table->string('nombre_proyecto');
             $table->string('descripcion');
             $table->string('fecha');
             $table->string('hora');
-            $table->string('imagen');
             $table->timestamps();
         });
     }

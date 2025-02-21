@@ -33,10 +33,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::put('estudiante/{id}', [EstudianteController::class, 'update'])->name('estudiante.update');
     Route::delete('estudiante/{id}', [EstudianteController::class, 'destroy'])->name('estudiante.destroy');
     
+    
     Route::get('proyecto', [ProyectoController::class, 'index'])->name('proyecto.index');
     Route::post('proyecto', [ProyectoController::class, 'store'])->name('proyecto.store');
     Route::put('proyecto/{id}', [ProyectoController::class, 'update'])->name('proyecto.update');
     Route::delete('proyecto/{id}', [ProyectoController::class, 'destroy'])->name('proyecto.destroy');
+    Route::get('/buscar-estudiante', [ProyectoController::class, 'buscar'])->name('proyecto.buscar');
     
     
 });
