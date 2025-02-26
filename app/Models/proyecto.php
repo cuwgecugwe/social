@@ -18,10 +18,10 @@ class proyecto extends Model
     ];
     public function estudiantes()
     {
-        // Define una relación "pertenece a" (belongsTo) con el modelo 'estudinate'.
-        // Esto significa que un estudiante pertenece a una estudinate.
-        return $this->belongsTo(estudiante::class, 'estudinate_id');
-        // 'estudinate_id' es la clave foránea que conecta esta tabla con la tabla 'estudinates'.
+        // Define una relación "pertenece a" (belongsTo) con el modelo 'estudiante'.
+        // Esto significa que un estudiante pertenece a una estudiante.
+        return $this->belongsTo(estudiante::class, 'estudiante_id');
+        // 'estudiante_id' es la clave foránea que conecta esta tabla con la tabla 'estudiantes'.
     }
 
 }

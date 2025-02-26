@@ -45,13 +45,13 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="nombre">Nombre</label>
-                            <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Nombre" autocomplete="off" required oninput="this.value = this.value.toUpperCase();">
+                            <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Nombre" autocomplete="off" disabled>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="apellido">Apellido</label>
-                            <input type="text" class="form-control" name="apellido" id="apellido" placeholder="Apellido" autocomplete="off" required oninput="this.value = this.value.toUpperCase();">
+                            <input type="text" class="form-control" name="apellido" id="apellido" placeholder="Apellido" autocomplete="off" disabled>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -112,7 +112,7 @@
                     @foreach ($proyecto as $proyectos)
                         <tr>
                             <td>{{ $proyectos->id }}</td>
-                            <td>{{ $proyectos->$estudiante->nombre.$estudiante->apellido }}</td>
+                            <td>{{ $proyectos->estudiantes->nombre." ".$proyectos->estudiantes->apellido }}</td>
                             <td>{{ $proyectos->nombre_proyecto }}</td>
                             <td>{{ $proyectos->descripcion }}</td>
                             <td>{{ $proyectos->fecha }}</td>
@@ -144,7 +144,8 @@
                                             <!-- Campos del formulario de edición -->
                                             <div class="form-group">
                                                 <label for="estudiante_id{{ $proyectos->id }}">Estudiante</label>
-                                                <input type="text" class="form-control" name="estudiante_id" id="nombre_proyecto{{ $proyectos->id }}" value="{{ $proyectos->estudiante_id}}">
+                                                <input type="text" class="form-control" name="estudiante_id" id="estudiante_id{{ $proyectos->id }}" value="{{ $proyectos->estudiantes->nombre." ".$proyectos->estudiantes->apellido}}" disabled>
+                                                <input type="hidden" name="estudiante_id" value="{{ $proyectos->estudiante_id }}">
                                             </div>
                                             <div class="form-group">
                                                 <label for="nombre_proyecto{{ $proyectos->id }}">Nombre proyecto</label>
@@ -175,7 +176,7 @@
                 </tbody>
             </table>
         </div>
-    </div>
+   </div>
 </div>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -189,14 +190,16 @@
                 if (data.error) {
                     alert(data.error);
                 } else {
+                    // Autocompletar los campos de nombre, apellido y estudiante_id
                     document.getElementById("nombre").value = data.nombre;
                     document.getElementById("apellido").value = data.apellido;
+                    document.getElementById("estudiante_id").value = data.estudiante_id; // Aquí se actualiza el hidden
                 }
             })
             .catch(error => console.error("Error en la solicitud:", error));
         } else {
             alert("Ingrese un DNI válido.");
         }
+        });
     });
-});
 </script>

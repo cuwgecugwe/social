@@ -112,21 +112,16 @@ class ProyectoController extends Controller
 
     public function buscar(Request $request)
     {
-        $dni = $request->query('dni');
+        $estudiante = Estudiante::where('dni', $request->dni)->first();
 
-        if (!$dni) {
-            return response()->json(['error' => 'Debe proporcionar un DNI'], 400);
+        if (!$estudiante) {
+            return response()->json(['error' => 'Estudiante no encontrado'], 404);
         }
 
-        $estudiante = estudiante::where('dni', $dni)->first();
-
-        if ($estudiante) {
-            return response()->json([
-                'nombre' => $estudiante->nombre,
-                'apellido' => $estudiante->apellido
-            ]);
-        } else {
-            return response()->json(['error' => 'No se encontró el estudiante'], 404);
-        }
+        return response()->json([
+            'nombre' => $estudiante->nombre,
+            'apellido' => $estudiante->apellido,
+            'estudiante_id' => $estudiante->id //  Aquí se asegura de enviar el estudiante_id
+        ]);
     }
 }
